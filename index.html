@@ -1,58 +1,11 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Test Link Google Drive (IMG)</title>
-  <style>
-    :root{--bg:#0b1020;--fg:#e5e7eb;--muted:#9ca3af;--card:#111827}
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto}
-    .wrap{max-width:900px;margin:40px auto;padding:0 16px}
-    .card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    .row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-    .btn{display:inline-block;background:#22c55e;color:#0b1020;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:600}
-    .status{font-weight:700}
-    img{max-width:100%;height:auto;border-radius:12px;display:block;margin-top:12px}
-    .muted{color:var(--muted);font-size:.95rem}
-    code{background:#0f172a;padding:2px 6px;border-radius:6px}
-  </style>
+  <meta charset="utf-8">
+  <title>Test Link</title>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Test Link Google Drive ➜ IMG</h1>
-    <div class="card">
-      <div class="row">
-        <div class="status" id="status">Status: memuat...</div>
-        <a class="btn" id="openBtn" target="_blank" rel="noopener">Buka Link Dalam Tab Baru</a>
-      </div>
-      <div class="muted" style="margin-top:8px">
-        Jika gambar terpapar dan status jadi <code>OK</code>, link ni boleh digunakan dalam HTML (<code>&lt;img src="..."&gt;</code>) tanpa paksa muat turun.
-      </div>
-      <!-- Gantikan URL di bawah jika kau nak test link lain -->
-      <img id="testImg" alt="Pratonton Gambar dari Google Drive"
-           src="https://drive.google.com/uc?id=1fFLzkewXAL3QCSp6dsbNhiLPZDD2pxbX">
-    </div>
-  </div>
-
-  <script>
-    const LINK = "https://drive.google.com/uc?id=1fFLzkewXAL3QCSp6dsbNhiLPZDD2pxbX";
-    const img = document.getElementById("testImg");
-    const statusEl = document.getElementById("status");
-    const openBtn = document.getElementById("openBtn");
-    openBtn.href = LINK;
-
-    function setStatus(text, ok=false){
-      statusEl.textContent = "Status: " + text;
-      statusEl.style.color = ok ? "#22c55e" : "#f87171";
-    }
-    img.addEventListener("load",  () => setStatus("OK – link boleh guna (gambar berjaya dimuat).", true));
-    img.addEventListener("error", () => setStatus("Gagal – link tak boleh dimuat sebagai imej.", false));
-
-    // Timeout jika host lambat/respons aneh
-    setTimeout(() => {
-      if (img.naturalWidth === 0) setStatus("Lambat/tersekat – cuba buka link pada butang hijau.", false);
-    }, 8000);
-  </script>
+  <h3>Test Link Google Drive</h3>
+  <img src="https://drive.google.com/uc?id=1fFLzkewXAL3QCSp6dsbNhiLPZDD2pxbX" alt="Test Gambar" width="500">
 </body>
 </html>
