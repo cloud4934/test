@@ -54,6 +54,8 @@
     .tag{font-size:12px;background:#1e293b;color:#c7d2fe;padding:4px 8px;border-radius:999px}
     footer{margin:28px 0 10px;color:#93a4b8;text-align:center}
 
+    /* ===== Floating Action Buttons ===== */
+
     /* FAB WhatsApp */
     .fab-wa{
       position:fixed; right:18px; bottom:18px; z-index:50;
@@ -84,7 +86,6 @@
       width:24px;height:24px;border-radius:999px;background:#e0f2fe;
       display:grid;place-items:center;font-weight:900
     }
-    /* PHONE: paparkan ikon sahaja untuk Info */
     @media (max-width:420px){
       .fab-info{padding:12px; gap:0}
       .fab-info span:not(.dot){display:none}
@@ -105,7 +106,7 @@
       .fab-map span.label{display:none}
     }
 
-    /* FAB Hours (status color will update via JS) */
+    /* FAB Hours */
     .fab-hours{
       position:fixed; right:18px; bottom:198px; z-index:50;
       display:inline-flex; align-items:center; gap:6px;
@@ -122,6 +123,24 @@
       .fab-hours{padding:12px}
       .fab-hours span.label{display:none}
     }
+
+    /* NEW: FAB Gallery */
+    .fab-gallery{
+      position:fixed; right:18px; bottom:258px; z-index:50;
+      display:inline-flex; align-items:center; gap:6px;
+      background:#a78bfa; color:#0b1020; text-decoration:none;
+      padding:12px 14px; border-radius:999px; font-weight:700;
+      box-shadow:0 10px 24px rgba(0,0,0,.25);
+      cursor:pointer; transition:transform .15s ease;
+    }
+    .fab-gallery:hover{transform:translateY(-1px)}
+    .fab-gallery .icon{width:24px;height:24px;display:grid;place-items:center;background:#ede9fe;border-radius:999px;font-weight:900}
+    @media (max-width:420px){
+      .fab-gallery{padding:12px}
+      .fab-gallery span.label{display:none}
+    }
+
+    /* ===== Sheets / Popups ===== */
 
     /* Sheet artikel */
     .sheet-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:flex-end; justify-content:center; z-index:60;}
@@ -146,29 +165,37 @@
     .sheet .badge{font-size:12px;background:#1e293b;color:#c7d2fe;padding:4px 8px;border-radius:999px}
     @media (min-width:820px){ .sheet{border-radius:16px} .sheet-backdrop{align-items:center} }
 
-    /* Popup gambar (produk) */
+    /* Popup gambar (produk klik kad) */
     .img-popup{ position:fixed; inset:0; background:rgba(0,0,0,.75); display:none; align-items:center; justify-content:center; z-index:100; }
     .img-popup img{ max-width:90%; max-height:85vh; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.6); }
     .img-popup .close-img{ position:absolute; top:20px; right:20px; background:#0e1731; color:#fff; border:none; font-size:22px; cursor:pointer; width:38px; height:38px; border-radius:50%; }
 
-    /* Panel Waktu Operasi */
-    .hours-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:70;}
-    .hours-card{
-      width:min(420px,92vw); background:#0b1328; color:var(--fg);
-      border:1px solid var(--line); border-radius:14px; padding:14px 16px 10px;
-      box-shadow:0 12px 32px rgba(0,0,0,.35); animation:up .18s ease-out both;
+    /* NEW: Panel Galeri (scrollable) */
+    .galeri-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; z-index:80;}
+    .galeri{
+      width:min(960px,96vw); background:#0b1328; color:var(--fg);
+      border:1px solid var(--line); border-radius:16px; padding:14px 16px 18px;
+      box-shadow:0 12px 36px rgba(0,0,0,.45); animation:up .18s ease-out both;
     }
-    .hours-card header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-    .hours-card h4{margin:0}
-    .close-hours{border:1px solid var(--line);background:#0e1731;color:#cbd5e1;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;cursor:pointer}
-    .hours-table{width:100%;border-collapse:collapse}
-    .hours-table td{padding:6px 4px;border-bottom:1px dashed var(--line)}
-    .hours-table td:first-child{color:#9fb0c9}
-    .row-today{background:#0f1a36}
-    .status-chip{display:inline-block;border-radius:999px;padding:2px 8px;font-size:12px;margin-left:8px}
-    .status-open{background:#16a34a;color:#eafff0}
-    .status-closed{background:#ef4444;color:#fff}
-    .next-note{color:#9fb0c9; font-size:13px; margin-top:6px}
+    .galeri header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .galeri h4{margin:0}
+    .close-galeri{border:1px solid var(--line);background:#0e1731;color:#cbd5e1;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;cursor:pointer}
+
+    .track{
+      display:flex; gap:12px; overflow-x:auto; padding-bottom:8px;
+      scroll-snap-type:x mandatory;
+    }
+    .track img{
+      scroll-snap-align:center;
+      height:min(70vh,520px);
+      width:auto; border-radius:12px; border:1px solid var(--line);
+      flex:0 0 auto; user-select:none;
+    }
+    .navs{display:flex;justify-content:center;gap:10px;margin-top:10px}
+    .navs button{
+      background:#0e1731; color:#fff; border:1px solid var(--line);
+      padding:8px 14px; border-radius:10px; cursor:pointer;
+    }
   </style>
 </head>
 <body>
@@ -255,6 +282,12 @@
     <span class="label" id="hoursFabLabel">Waktu Operasi</span>
   </button>
 
+  <!-- NEW: FAB Gallery -->
+  <button class="fab-gallery" id="openGaleri" aria-haspopup="dialog" aria-controls="galeriPanel" aria-expanded="false">
+    <span class="icon">🖼️</span>
+    <span class="label">Imej Logo</span>
+  </button>
+
   <!-- SHEET ARTIKEL -->
   <div class="sheet-backdrop" id="sheetBackdrop" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" style="display:none">
     <div class="sheet" id="sheetArtikel">
@@ -299,29 +332,28 @@
     </div>
   </div>
 
-  <!-- PANEL WAKTU OPERASI -->
-  <div class="hours-backdrop" id="hoursBackdrop" role="dialog" aria-modal="true" aria-labelledby="hoursTitle" style="display:none">
-    <div class="hours-card" id="hoursCard">
+  <!-- NEW: PANEL GALERI -->
+  <div class="galeri-backdrop" id="galeriBackdrop" role="dialog" aria-modal="true" aria-labelledby="galeriTitle" style="display:none">
+    <div class="galeri" id="galeriPanel">
       <header>
-        <h4 id="hoursTitle">Waktu Operasi
-          <span id="openStatusChip" class="status-chip status-open">Buka sekarang</span>
-        </h4>
-        <button class="close-hours" id="closeHours" aria-label="Tutup">✕</button>
+        <h4 id="galeriTitle">Imej Logo</h4>
+        <button class="close-galeri" id="closeGaleri" aria-label="Tutup">✕</button>
       </header>
-      <table class="hours-table" aria-describedby="hoursTitle">
-        <tr data-day="1"><td>Isnin (Monday)</td><td>9:00 pagi – 9:00 malam</td></tr>
-        <tr data-day="2"><td>Selasa (Tuesday)</td><td>9:00 pagi – 9:00 malam</td></tr>
-        <tr data-day="3"><td>Rabu (Wednesday)</td><td>9:00 pagi – 9:00 malam</td></tr>
-        <tr data-day="4"><td>Khamis (Thursday)</td><td>9:00 pagi – 9:00 malam</td></tr>
-        <tr data-day="5"><td>Jumaat (Friday)</td><td>9:00 pagi – 9:00 malam</td></tr>
-        <tr data-day="6"><td>Sabtu (Saturday)</td><td>9:30 pagi – 5:00 petang</td></tr>
-        <tr data-day="0"><td>Ahad (Sunday)</td><td>Tutup</td></tr>
-      </table>
-      <p id="nextNote" class="next-note"></p>
+
+      <div class="track" id="track">
+        <img src="https://i.ibb.co/1ffksPXx/Screenshot-2025-08-19-173811.png" alt="Logo 1">
+        <img src="https://i.ibb.co/rK5Rn8GG/Screenshot-2025-08-19-173757.png" alt="Logo 2">
+        <img src="https://i.ibb.co/NnNrPWDS/Screenshot-2025-08-19-173750.png" alt="Logo 3">
+      </div>
+
+      <div class="navs">
+        <button id="prevBtn" type="button" aria-label="Sebelum">← Prev</button>
+        <button id="nextBtn" type="button" aria-label="Seterusnya">Next →</button>
+      </div>
     </div>
   </div>
 
-  <!-- POPUP GAMBAR PRODUK -->
+  <!-- POPUP GAMBAR PRODUK (klik kad) -->
   <div class="img-popup" id="imgPopup">
     <button class="close-img" id="closeImg">✕</button>
     <img src="" alt="Popup Produk" id="popupImg">
@@ -341,7 +373,7 @@
     backdrop.addEventListener('click', e=>{ if(e.target===backdrop) closeSheet(); });
     document.addEventListener('keydown', e=>{ if(e.key==='Escape' && backdrop.style.display==='flex') closeSheet(); });
 
-    // ===== Popup gambar produk =====
+    // ===== Popup gambar produk (klik kad) =====
     const imgs = document.querySelectorAll('.card img');
     const popup = document.getElementById('imgPopup');
     const popupImg = document.getElementById('popupImg');
@@ -382,7 +414,6 @@
       return `${h}:${m.toString().padStart(2,'0')} ${label}`;
     }
 
-    // FIX: mesej buka seterusnya ikut logik hari esok bila dah tutup hari ini
     function nextOpenMessage(){
       const now = new Date();
       const day = now.getDay();
@@ -394,12 +425,9 @@
         if (!slot) continue;
 
         if (i === 0) {
-          if (t <= slot[0]) {
-            return `Buka hari ini pada ${formatTime(slot[0])}.`;
-          }
-          if (t >= slot[1]) continue; // dah tutup, cari hari seterusnya
+          if (t <= slot[0]) return `Buka hari ini pada ${formatTime(slot[0])}.`;
+          if (t >= slot[1]) continue;
         }
-
         const when = (i === 1) ? 'esok' :
           ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'][d];
         return `Buka ${when} pada ${formatTime(slot[0])}.`;
@@ -442,6 +470,33 @@
 
     computeStatus();
     setInterval(computeStatus, 60*1000);
+
+    // ===== NEW: Galeri (FAB) =====
+    const openGaleriBtn = document.getElementById('openGaleri');
+    const galeriBackdrop = document.getElementById('galeriBackdrop');
+    const closeGaleriBtn = document.getElementById('closeGaleri');
+    const track = document.getElementById('track');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function openGaleri(){ galeriBackdrop.style.display='flex'; openGaleriBtn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+    function closeGaleri(){ galeriBackdrop.style.display='none'; openGaleriBtn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+
+    openGaleriBtn.addEventListener('click', openGaleri);
+    closeGaleriBtn.addEventListener('click', closeGaleri);
+    galeriBackdrop.addEventListener('click', e=>{ if(e.target===galeriBackdrop) closeGaleri(); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape' && galeriBackdrop.style.display==='flex') closeGaleri(); });
+
+    // Nav scroll
+    function scrollByCard(dir){
+      const imgs = track.querySelectorAll('img');
+      if(!imgs.length) return;
+      // kira luas 1 imej + gap:
+      const cardWidth = imgs[0].getBoundingClientRect().width + 12;
+      track.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
+    }
+    prevBtn.addEventListener('click', ()=>scrollByCard(-1));
+    nextBtn.addEventListener('click', ()=>scrollByCard(1));
   </script>
 </body>
 </html>
