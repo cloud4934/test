@@ -356,7 +356,7 @@
     popup.addEventListener('click', e=>{ if(e.target===popup) popup.style.display='none'; });
     document.addEventListener('keydown', e=>{ if(e.key==='Escape') popup.style.display='none'; });
 
-    // ===== Waktu Operasi (sync masa semasa) =====
+    // ===== Waktu Operasi (ikut timezone device) =====
     const openHoursBtn = document.getElementById('openHours');
     const hoursBackdrop = document.getElementById('hoursBackdrop');
     const closeHoursBtn = document.getElementById('closeHours');
@@ -382,6 +382,31 @@
       return `${h}:${m.toString().padStart(2,'0')} ${label}`;
     }
 
+    // FIX: mesej buka seterusnya ikut logik hari esok bila dah tutup hari ini
+    function nextOpenMessage(){
+      const now = new Date();
+      const day = now.getDay();
+      const t = minutesNow();
+
+      for (let i = 0; i < 7; i++) {
+        const d = (day + i) % 7;
+        const slot = SCHEDULE[d];
+        if (!slot) continue;
+
+        if (i === 0) {
+          if (t <= slot[0]) {
+            return `Buka hari ini pada ${formatTime(slot[0])}.`;
+          }
+          if (t >= slot[1]) continue; // dah tutup, cari hari seterusnya
+        }
+
+        const when = (i === 1) ? 'esok' :
+          ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'][d];
+        return `Buka ${when} pada ${formatTime(slot[0])}.`;
+      }
+      return '';
+    }
+
     function computeStatus(){
       const now=new Date();
       const day=now.getDay();
@@ -391,19 +416,6 @@
       document.querySelectorAll('.hours-table tr').forEach(tr=>{
         tr.classList.toggle('row-today', Number(tr.dataset.day)===day);
       });
-
-      function nextOpenMessage(){
-        for(let i=0;i<7;i++){
-          const d=(day+i)%7, slot=SCHEDULE[d];
-          if(slot){
-            const when = i===0 && t <= slot[0] ? 'hari ini' :
-                         i===1 ? 'esok' :
-                         ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'][d];
-            return `Buka ${when} pada ${formatTime(slot[0])}.`;
-          }
-        }
-        return '';
-      }
 
       if(today && t>=today[0] && t<today[1]){
         openStatusChip.textContent='Buka sekarang';
