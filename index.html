@@ -3,131 +3,79 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>KT Nisang – Katalog</title>
+  <title>Katalog KT Nisang</title>
   <style>
     :root{
-      --bg:#0b1020;--fg:#e5e7eb;--muted:#9ca3af;--card:#111827;--line:#1f2a44;
+      --bg:#0b1020; --fg:#e5e7eb; --muted:#9ca3af;
+      --card:#111827; --line:#1f2a44; --brand:#25D366;
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto;background:var(--bg);color:var(--fg)}
-    .wrap{max-width:1100px;margin:36px auto;padding:0 16px 96px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,Arial,sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
+    .wrap{max-width:1100px;margin:36px auto;padding:0 16px}
 
-    /* HERO */
-    .hero{
-      display:grid;grid-template-columns:1fr;gap:16px;
-      padding:20px;border:1px solid var(--line);border-radius:14px;
-      background:linear-gradient(180deg,#0f172a,#0b1020)
+    .card{
+      background:var(--card);padding:16px 20px;border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.4);margin-bottom:20px
     }
-    .hero h1{margin:0 0 8px}
-    .hero p{margin:0 0 14px;color:var(--muted)}
-    .brand-logos{display:flex;gap:12px;flex-wrap:wrap}
-    .brand-logos img{width:120px;height:auto;border-radius:12px;border:1px solid var(--line);background:#0b1020}
-    .hero .right{width:100%;height:140px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
+    h1{font-size:1.4rem;margin-bottom:6px}
+    p{margin-bottom:10px}
+    
+    /* Info Section */
+    .info{margin:20px 0}
+    .info h2{font-size:1.2rem;margin-bottom:10px;color:#fff}
+    .info p{color:var(--muted);font-size:1rem}
 
-    /* >=768px: dua lajur */
-    @media (min-width:768px){
-      .hero{grid-template-columns:1.1fr .9fr;gap:20px}
-      .brand-logos img{width:140px}
-      .hero .right{width:50%;height:120px;margin-left:auto;margin-right:auto}
+    /* Floating icons */
+    .float-container{
+      position:fixed;bottom:20px;right:20px;
+      display:flex;flex-direction:column;gap:12px;z-index:1000;
     }
-
-    /* PRODUK */
-    h2{margin:28px 0 12px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
-    .card img{width:100%;height:160px;object-fit:cover;cursor:pointer;transition:transform .25s ease, box-shadow .25s ease}
-    /* Hover effect hanya pada device yang menyokong hover */
-    @media (hover:hover){
-      .card img:hover{transform:scale(1.08);box-shadow:0 10px 24px rgba(0,0,0,.45);z-index:2;position:relative}
+    .float-container a{
+      width:60px;height:60px;border-radius:12px;
+      background:#111827;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 2px 8px rgba(0,0,0,0.5);transition:transform 0.2s;
     }
-    .p{padding:12px}
-    .title{margin:0 0 6px;font-weight:800}
-    .desc{margin:0 0 10px;color:var(--muted)}
-    .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
-    .price{font-weight:800}
-    .tag{font-size:12px;background:#1e293b;color:#c7d2fe;padding:4px 8px;border-radius:999px}
-    footer{margin:28px 0 10px;color:#93a4b8;text-align:center}
-
-    /* INFO: ringkas di phone, penuh di skrin besar */
-    .info-short{display:block}
-    .info-full{display:none}
-    @media (min-width:768px){
-      .info-short{display:none}
-      .info-full{display:block}
-    }
+    .float-container a:hover{transform:scale(1.1)}
+    .float-container img{width:36px;height:36px;object-fit:contain}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- HERO -->
-    <section class="hero">
-      <div>
-        <h1>Katalog KT Nisang</h1>
-        <p>Pilihan bekas pelbagai saiz. Sesuai untuk simpanan, hantaran & kegunaan harian.</p>
-        <div class="brand-logos">
-          <img src="https://i.ibb.co/3YytfpzF/Chat-GPT-Image-Aug-19-2025-05-21-35-PM.png" alt="Logo KT Nisang A">
-          <img src="https://i.ibb.co/FkwCQ92S/Screenshot-2025-08-19-173832.png" alt="Logo KT Nisang B">
-        </div>
-      </div>
-      <img class="right" src="https://i.imgur.com/QJ5t2QZ_d.png?maxwidth=520&shape=thumb&fidelity=high" alt="Produk KT Nisang" />
-    </section>
-
-    <!-- INFO GULA NISANG -->
-    <h2>Info Gula Nisang</h2>
-    <!-- Ringkas (phone) -->
-    <p class="info-short">
-      Gula Nisang dibuat daripada air nira mayang kelapa, dimasak pekat dan dicetak bulat (acuan mengkuang). Boleh simpan beku; jika dibiarkan lama pada suhu bilik, ia akan berfermentasi menjadi cuka semula jadi.
-    </p>
-    <!-- Penuh (desktop/tablet besar) -->
-    <p class="info-full">
-      Gula Nisang ialah pemanis tradisional yang dibuat daripada air nira kelapa. Air nira segar dikumpul dari mayang kelapa, kemudian dimasak sehingga pekat dan dibentuk menggunakan acuan bulat daripada jalur mengkuang yang dipotong serta disambung hujung ke hujung. Ia boleh disimpan dalam peti sejuk beku; jika dibiarkan pada suhu bilik, proses fermentasi semula jadi akan berlaku dan akhirnya menghasilkan cuka.
-    </p>
-
-    <!-- PRODUK -->
-    <h2 id="produk">Produk</h2>
-    <div class="grid">
-      <article class="card">
-        <img src="https://i.imgur.com/bG7A1gg.png" alt="Pack (Ikat)">
-        <div class="p">
-          <div class="row" style="margin-bottom:6px"><h3 class="title">Pack (Ikat)</h3><span class="tag">Pack</span></div>
-          <p class="desc">Contoh pembungkusan berikat. (Tiada harga)</p>
-          <div class="row"><div class="price">RM —</div><span></span></div>
-        </div>
-      </article>
-
-      <article class="card">
-        <img src="https://i.ibb.co/j9CgLwvJ/Screenshot-2025-08-19-124545-Copy.png" alt="Original (Bekas)">
-        <div class="p">
-          <div class="row" style="margin-bottom:6px"><h3 class="title">Original (Bekas)</h3><span class="tag">Bekas</span></div>
-          <p class="desc">Pilihan dalam bekas plastik kedap.</p>
-          <div class="row"><div class="price">RM —</div><span></span></div>
-        </div>
-      </article>
-
-      <article class="card">
-        <img src="https://i.ibb.co/FLsywJ0d/Screenshot-2025-08-19-124537-Copy-2.png" alt="Kecil 6.5cm">
-        <div class="p">
-          <div class="row" style="margin-bottom:6px"><h3 class="title">Kecil</h3><span class="tag">6.5cm ±</span></div>
-          <p class="desc">Saiz kecil untuk kegunaan harian.</p>
-          <div class="row"><div class="price">RM —</div><span></span></div>
-        </div>
-      </article>
-
-      <article class="card">
-        <img src="https://i.ibb.co/Hp1wfxXX/Screenshot-2025-08-19-124537-Copy-Copy.png" alt="Besar 9.5cm">
-        <div class="p">
-          <div class="row" style="margin-bottom:6px"><h3 class="title">Besar</h3><span class="tag">9.5cm ±</span></div>
-          <p class="desc">Saiz besar untuk kuantiti lebih.</p>
-          <div class="row"><div class="price">RM —</div><span></span></div>
-        </div>
-      </article>
+    <div class="card">
+      <h1>Katalog KT Nisang</h1>
+      <p>Pilihan bekas pelbagai saiz. Sesuai untuk simpanan, hantaran & kegunaan harian.</p>
     </div>
 
-    <footer>© <span id="year"></span> KT Nisang</footer>
+    <div class="info">
+      <h2>Info Gula Nisang</h2>
+      <p>
+        Gula Nisang ialah pemanis tradisional yang dibuat daripada air nira kelapa. 
+        Air nira segar dikumpul dari mayang kelapa, kemudian dimasak sehingga pekat 
+        dan dibentuk menggunakan acuan bulat daripada anyaman mengkuang. 
+        Ia boleh disimpan dalam peti sejuk beku, atau dibiarkan pada suhu bilik 
+        di mana proses fermentasi semula jadi akhirnya akan menghasilkan cuka.
+      </p>
+    </div>
   </div>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  <!-- Floating Icons -->
+  <div class="float-container">
+    <!-- Logo KT -->
+    <a href="#">
+      <img src="https://i.ibb.co/FkwCQ92S/Screenshot-2025-08-19-173832.png" alt="Logo KT">
+    </a>
+    <!-- Location -->
+    <a href="https://maps.app.goo.gl/NMCTictdkkkZxZmH7" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Lokasi">
+    </a>
+    <!-- Operating Hour -->
+    <a href="#">
+      <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" alt="Waktu Operasi">
+    </a>
+    <!-- Produk -->
+    <a href="#">
+      <img src="https://i.ibb.co/3YytfpzF/Chat-GPT-Image-Aug-19-2025-05-21-35-PM.png" alt="Produk">
+    </a>
+  </div>
 </body>
 </html>
