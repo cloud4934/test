@@ -1,44 +1,347 @@
-<!-- Floating Bubble Button -->
-<div id="fab" class="fixed bottom-6 right-6 z-50">
-  <button id="fabBtn"
-          class="w-14 h-14 rounded-full bg-sky-600 shadow-lg flex items-center justify-center text-white text-2xl hover:bg-sky-700">
-    💬
-  </button>
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MyTakaful – Perlindungan Pintar Keluarga</title>
+  <meta name="description" content="MyTakaful — Platform ringkas untuk penerangan pelan takaful, medical card, hibah, dan temujanji pantas melalui WhatsApp." />
+  <meta property="og:title" content="MyTakaful – Perlindungan Pintar Keluarga" />
+  <meta property="og:description" content="Info ringkas, pelan jelas, dan tindakan pantas. Hubungi kami untuk semakan pelan peribadi anda." />
+  <meta name="theme-color" content="#0ea5e9" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth }
+    .container { max-width: 1100px }
+  </style>
+</head>
+<body class="antialiased text-slate-800">
 
-  <!-- Popup Card -->
-  <div id="fabCard"
-       class="hidden absolute bottom-20 right-0 w-64 bg-white rounded-xl shadow-lg border border-slate-200 p-4">
-    <div class="text-center">
-      <img src="https://via.placeholder.com/80" alt="Foto" class="w-20 h-20 rounded-full mx-auto mb-3 border">
-      <h3 class="text-lg font-semibold">Hafizul</h3>
-      <p class="text-sm text-slate-500">Takaful Advisor</p>
-      <div class="mt-3 flex flex-col gap-2">
-        <a href="https://wa.me/601125517767" target="_blank"
-           class="px-3 py-2 rounded-lg bg-emerald-500 text-white text-sm hover:bg-emerald-600">
-           WhatsApp
-        </a>
-        <a href="https://linktr.ee/hafizulca" target="_blank"
-           class="px-3 py-2 rounded-lg border border-slate-300 text-sm hover:bg-slate-100">
-           Linktree
-        </a>
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-100">
+    <nav class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2 font-semibold tracking-wide">
+        <span class="inline-block w-8 h-8 rounded-xl bg-sky-500"></span>
+        <span>MyTakaful</span>
+      </a>
+      <button id="menuBtn" class="md:hidden p-2 rounded-lg border border-slate-200" aria-label="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+      <ul id="menu" class="hidden md:flex items-center gap-6 text-sm">
+        <li><a class="hover:text-sky-600" href="#manfaat">Manfaat</a></li>
+        <li><a class="hover:text-sky-600" href="#pelan">Pelan</a></li>
+        <li><a class="hover:text-sky-600" href="#soalan">FAQ</a></li>
+        <li><a class="hover:text-sky-600" href="#hubungi">Hubungi</a></li>
+        <li><a class="px-4 py-2 rounded-xl bg-sky-600 text-white hover:bg-sky-700" href="#hubungi">Dapatkan Sebut Harga</a></li>
+      </ul>
+    </nav>
+    <div id="menuMobile" class="hidden md:hidden border-t border-slate-100">
+      <ul class="container mx-auto px-4 py-3 grid gap-3 text-sm">
+        <li><a class="block py-2" href="#manfaat">Manfaat</a></li>
+        <li><a class="block py-2" href="#pelan">Pelan</a></li>
+        <li><a class="block py-2" href="#soalan">FAQ</a></li>
+        <li><a class="block py-2" href="#hubungi">Hubungi</a></li>
+        <li><a class="inline-flex justify-center px-4 py-2 rounded-xl bg-sky-600 text-white" href="#hubungi">Dapatkan Sebut Harga</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative">
+    <div class="absolute inset-0 -z-10">
+      <div class="w-full h-full bg-gradient-to-b from-sky-200 to-white"></div>
+    </div>
+    <div class="container mx-auto px-4 py-20 md:py-28">
+      <div class="max-w-2xl">
+        <h1 class="text-3xl md:text-5xl font-bold leading-tight text-slate-900">
+          Perlindungan perubatan & kewangan untuk keluarga — jelas, mudah, telus.
+        </h1>
+        <p class="mt-4 text-slate-700 md:text-lg">
+          Semak pelan terbaik ikut bajet dan keperluan. Kami bantu dari A sampai Z — dari penerangan, pendaftaran, hingga tuntutan.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="https://wa.me/601125517767" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">WhatsApp Sekarang</a>
+          <a href="#pelan" class="px-5 py-3 rounded-xl border border-slate-300 hover:border-slate-400">Lihat Pelan</a>
+        </div>
+        <ul class="mt-6 grid grid-cols-2 gap-2 text-sm text-slate-600">
+          <li class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Medical Card</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Hibah Keluarga</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Penyakit Kritikal</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Kemalangan</li>
+        </ul>
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<script>
-  // Toggle bubble popup
-  const fabBtn = document.getElementById('fabBtn');
-  const fabCard = document.getElementById('fabCard');
+  <!-- Manfaat -->
+  <section id="manfaat" class="py-16 md:py-20">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl">
+        <h2 class="text-2xl md:text-3xl font-semibold">Kenapa pilih MyTakaful?</h2>
+        <p class="mt-3 text-slate-600">Fokus kami ialah memastikan anda faham pelan yang diambil, bukan sekadar daftar. Semua penerangan dibuat dalam bahasa mudah dengan angka yang telus.</p>
+        <ul class="mt-6 space-y-3 text-slate-700">
+          <li class="flex gap-3"><span class="text-sky-600">▸</span> Semakan pelan ikut bajet dan keperluan</li>
+          <li class="flex gap-3"><span class="text-sky-600">▸</span> Panduan tuntutan langkah-demi-langkah</li>
+          <li class="flex gap-3"><span class="text-sky-600">▸</span> Pilihan manfaat fleksibel (medical, hibah, kritikal, kemalangan)</li>
+          <li class="flex gap-3"><span class="text-sky-600">▸</span> Sokongan WhatsApp responsif</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-  fabBtn.addEventListener('click', () => {
-    fabCard.classList.toggle('hidden');
-  });
+  <!-- Pelan -->
+  <section id="pelan" class="py-16 md:py-20 bg-slate-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mb-10">
+        <h2 class="text-2xl md:text-3xl font-semibold">Pilihan Pelan</h2>
+        <p class="mt-2 text-slate-600">Contoh struktur pelan. Semua angka boleh diubah ikut umur, pekerjaan, dan bajet.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl shadow p-6 flex flex-col">
+          <h3 class="text-xl font-semibold">Plan 150</h3>
+          <ul class="mt-4 text-sm text-slate-700 space-y-2">
+            <li>Had Tahunan: RM150,000</li>
+            <li>Bilik: RM150/malam</li>
+            <li>Lifetime Limit: Unlimited</li>
+          </ul>
+          <button onclick="prefillPlan('Plan 150')" class="mt-6 inline-flex justify-center px-4 py-2 rounded-xl bg-sky-600 text-white hover:bg-sky-700">Minta Quotation</button>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-6 border-2 border-sky-600 flex flex-col">
+          <h3 class="text-xl font-semibold">Plan 200</h3>
+          <ul class="mt-4 text-sm text-slate-700 space-y-2">
+            <li>Had Tahunan: RM200,000</li>
+            <li>Bilik: RM200/malam</li>
+            <li>Lifetime Limit: Unlimited</li>
+          </ul>
+          <button onclick="prefillPlan('Plan 200')" class="mt-6 inline-flex justify-center px-4 py-2 rounded-xl bg-sky-600 text-white hover:bg-sky-700">Minta Quotation</button>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-6 flex flex-col">
+          <h3 class="text-xl font-semibold">Plan 250</h3>
+          <ul class="mt-4 text-sm text-slate-700 space-y-2">
+            <li>Had Tahunan: RM250,000</li>
+            <li>Bilik: RM250/malam</li>
+            <li>Lifetime Limit: Unlimited</li>
+          </ul>
+          <button onclick="prefillPlan('Plan 250')" class="mt-6 inline-flex justify-center px-4 py-2 rounded-xl bg-sky-600 text-white hover:bg-sky-700">Minta Quotation</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  // Klik luar popup untuk tutup
-  document.addEventListener('click', (e) => {
-    if (!fabBtn.contains(e.target) && !fabCard.contains(e.target)) {
-      fabCard.classList.add('hidden');
+  <!-- FAQ -->
+  <section id="soalan" class="py-16 md:py-20">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mb-8">
+        <h2 class="text-2xl md:text-3xl font-semibold">Soalan Lazim</h2>
+        <p class="mt-2 text-slate-600">Ringkas dan terus kepada point.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <details class="group bg-white border border-slate-200 rounded-xl p-5">
+          <summary class="cursor-pointer font-medium">Berapa anggaran sumbangan bulanan?</summary>
+          <div class="mt-3 text-slate-600">Bergantung pada umur, pekerjaan, dan manfaat dipilih. Tekan “Minta Quotation” untuk semakan percuma.</div>
+        </details>
+        <details class="group bg-white border border-slate-200 rounded-xl p-5">
+          <summary class="cursor-pointer font-medium">Adakah boleh ubah pelan kemudian?</summary>
+          <div class="mt-3 text-slate-600">Boleh, selagi mematuhi terma syarikat.</div>
+        </details>
+        <details class="group bg-white border border-slate-200 rounded-xl p-5">
+          <summary class="cursor-pointer font-medium">Proses tuntutan macam mana?</summary>
+          <div class="mt-3 text-slate-600">Kami sediakan senarai semak & pandu langkah demi langkah. Hubungi kami bila berlaku tuntutan.</div>
+        </details>
+        <details class="group bg-white border border-slate-200 rounded-xl p-5">
+          <summary class="cursor-pointer font-medium">Panel hospital ada di mana?</summary>
+          <div class="mt-3 text-slate-600">Senarai panel akan dikongsi semasa semakan pelan.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hubungi -->
+  <section id="hubungi" class="py-16 md:py-20 bg-slate-900 text-white">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-semibold">Tanya kami, dapatkan cadangan tepat</h2>
+          <p class="mt-2 text-slate-300">Hantar umur, pekerjaan, bajet anggaran & keutamaan (medical/hibah/kritikal/kemalangan). Kami balas dengan pilihan yang jelas.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="https://wa.me/601125517767" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-emerald-500 text-white hover:bg-emerald-600">WhatsApp</a>
+            <a href="https://linktr.ee/hafizulca" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl border border-white/30 text-white hover:bg-white/10">Linktree</a>
+          </div>
+          <p class="mt-4 text-xs text-white/70">Waktu respons: 8.00 pagi – 12.00 malam. Kecemasan: <a class="underline" href="tel:+601125517767">011-2551 7767</a></p>
+        </div>
+
+        <form class="bg-white text-slate-800 rounded-2xl p-6 shadow grid gap-4" onsubmit="openWA(event)">
+          <div>
+            <label class="text-sm" for="nama">Nama</label>
+            <input id="nama" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2" type="text" required />
+          </div>
+          <div>
+            <label class="text-sm" for="umur">Umur</label>
+            <input id="umur" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2" type="number" required />
+          </div>
+          <div>
+            <label class="text-sm" for="pekerjaan">Pekerjaan</label>
+            <input id="pekerjaan" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2" type="text" />
+          </div>
+          <div>
+            <label class="text-sm" for="keutamaan">Keutamaan</label>
+            <select id="keutamaan" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2">
+              <option>Medical Card</option>
+              <option>Hibah</option>
+              <option>Penyakit Kritikal</option>
+              <option>Kemalangan</option>
+              <option>Gabungan</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-sm" for="bajet">Bajet (RM/bulan)</label>
+            <input id="bajet" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2" type="number" placeholder="contoh: 200" />
+          </div>
+          <button class="mt-2 px-5 py-3 rounded-xl bg-sky-600 text-white hover:bg-sky-700">Hantar di WhatsApp</button>
+          <p class="text-xs text-slate-500">Dengan menghantar, anda bersetuju untuk dihubungi melalui WhatsApp bagi tujuan semakan pelan.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-8 border-t border-slate-100 text-center text-slate-500">
+    © <span id="y"></span> MyTakaful. Semua hak cipta terpelihara.
+  </footer>
+
+  <!-- ===== Balloon / Floating Button + Business Card Panel ===== -->
+  <!-- Overlay -->
+  <div id="bc-overlay" class="hidden fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm"></div>
+
+  <!-- Floating button -->
+  <button id="bc-fab"
+    class="fixed bottom-6 right-6 z-[70] w-14 h-14 rounded-full bg-sky-600 text-white shadow-lg shadow-sky-600/20
+           flex items-center justify-center hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-300"
+    aria-label="Buka kad bisnes">
+    <!-- chat icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+            d="M7 8h10M7 12h6M20 12c0 4.418-4.03 8-9 8-1.188 0-2.32-.19-3.36-.54L4 20l.54-3.64C4.19 15.32 4 14.19 4 13c0-4.418 4.03-8 9-8s7 3.582 7 7z"/>
+    </svg>
+    <span class="absolute inset-0 rounded-full animate-ping bg-sky-500/30"></span>
+  </button>
+
+  <!-- Slide-in Panel (business card) -->
+  <aside id="bc-panel"
+    class="fixed top-0 right-0 z-[80] h-full w-[360px] max-w-[92vw] translate-x-full
+           bg-white border-l border-slate-200 shadow-2xl transition-transform duration-300 ease-out">
+    <div class="p-5">
+      <div class="flex items-center gap-3">
+        <img src="https://via.placeholder.com/96" alt="Hafizul" class="w-16 h-16 rounded-full border">
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900">Hafizul</h3>
+          <p class="text-xs text-slate-500">Takaful Advisor • MyTakaful</p>
+        </div>
+        <button id="bc-close" class="ml-auto p-2 rounded-lg hover:bg-slate-100 text-slate-500" aria-label="Tutup">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="mt-5 grid gap-3">
+        <a href="https://wa.me/601125517767" target="_blank" rel="noopener"
+           class="flex items-center gap-3 px-4 py-3 rounded-xl border border-emerald-200 hover:bg-emerald-50">
+          <span class="inline-flex w-9 h-9 rounded-lg bg-emerald-500/10 items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.02 2 11.1c0 2.22.87 4.25 2.3 5.82L3 22l5.26-1.38c1.19.33 2.44.51 3.74.51 5.52 0 10-4.02 10-9.1S17.52 2 12 2z"/>
+            </svg>
+          </span>
+          <div>
+            <div class="font-medium text-slate-900">WhatsApp</div>
+            <div class="text-xs text-slate-500">011-2551 7767 (chat segera)</div>
+          </div>
+        </a>
+
+        <a href="https://linktr.ee/hafizulca" target="_blank" rel="noopener"
+           class="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 hover:bg-slate-50">
+          <span class="inline-flex w-9 h-9 rounded-lg bg-slate-500/10 items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                    d="M10 14L21 3m0 0h-6m6 0v6M13 5H7a4 4 0 0 0 0 8h2"/>
+            </svg>
+          </span>
+          <div>
+            <div class="font-medium text-slate-900">Linktree</div>
+            <div class="text-xs text-slate-500">Semua pautan & profil</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200">
+        <p class="text-sm text-slate-700">
+          Waktu respons: 8.00 pagi – 12.00 malam. Untuk kecemasan, call terus <a href="tel:+601125517767" class="underline">011-2551 7767</a>.
+        </p>
+      </div>
+    </div>
+  </aside>
+
+  <script>
+    // Tahun footer
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Menu mobile
+    const menuBtn = document.getElementById('menuBtn');
+    const menuMobile = document.getElementById('menuMobile');
+    if (menuBtn && menuMobile) {
+      menuBtn.addEventListener('click', () => menuMobile.classList.toggle('hidden'));
+      menuMobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menuMobile.classList.add('hidden')));
     }
-  });
-</script>
+
+    // Prefill plan → form
+    function prefillPlan(plan) {
+      document.getElementById('keutamaan').value = 'Medical Card';
+      document.querySelector('form').dataset.selectedPlan = plan;
+      document.getElementById('hubungi').scrollIntoView({behavior: 'smooth'});
+    }
+
+    // Hantar WhatsApp
+    function openWA(e) {
+      e.preventDefault();
+      const phone = '601125517767';
+      const form = document.querySelector('form');
+      const nama = document.getElementById('nama').value.trim();
+      const umur = document.getElementById('umur').value.trim();
+      const pekerjaan = (document.getElementById('pekerjaan').value || '-').trim();
+      const keutamaan = document.getElementById('keutamaan').value.trim();
+      const bajet = (document.getElementById('bajet').value || '-').trim();
+      const plan = form.dataset.selectedPlan ? `\nPelan Pilihan: ${form.dataset.selectedPlan}` : '';
+      if (!nama || !umur) { alert('Sila isi Nama dan Umur.'); return; }
+      const msg = `Assalamualaikum, saya ${nama}.
+Umur: ${umur}
+Pekerjaan: ${pekerjaan}
+Keutamaan: ${keutamaan}${plan}
+Bajet: RM${bajet}/bulan
+
+Mohon semak pelan yang sesuai. Terima kasih.`;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank', 'noopener') || (window.location.href = url);
+    }
+
+    // ===== Balloon / Panel logic =====
+    const bcFab = document.getElementById('bc-fab');
+    const bcPanel = document.getElementById('bc-panel');
+    const bcOverlay = document.getElementById('bc-overlay');
+    const bcClose = document.getElementById('bc-close');
+
+    function openPanel() {
+      bcOverlay.classList.remove('hidden');
+      bcPanel.classList.remove('translate-x-full');
+    }
+    function closePanel() {
+      bcPanel.classList.add('translate-x-full');
+      bcOverlay.classList.add('hidden');
+    }
+
+    bcFab.addEventListener('click', openPanel);
+    bcOverlay.addEventListener('click', closePanel);
+    bcClose.addEventListener('click', closePanel);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePanel(); });
+  </script>
+</body>
+</html>
