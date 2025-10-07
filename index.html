@@ -12,6 +12,50 @@
   <style>
     html { scroll-behavior: smooth }
     .container { max-width: 1100px }
+
+    /* ================= Kad 3D berisi (extruded) ================= */
+    :root { --thk: 14px; } /* ketebalan kad boleh ubah */
+
+    .scene { perspective: 1400px; }
+    .card3d {
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateX(0) rotateY(0);
+      transition: transform 80ms linear, box-shadow .2s;
+      border-radius: 12px;
+      background: #fff;
+      overflow: visible;
+      box-shadow:
+        0 24px 40px -20px rgba(2,132,199,.35),
+        0 18px 36px -18px rgba(15,23,42,.30),
+        0 6px 14px rgba(0,0,0,.18);
+    }
+    .card3d.is-dragging { cursor: grabbing; }
+
+    .face { position:absolute; inset:0; backface-visibility:hidden; border-radius:12px; overflow:hidden; }
+    .face img { width:100%; height:100%; object-fit:fill; } /* tiada crop bila bekas ikut nisbah imej */
+    .front { transform: translateZ(calc(var(--thk)/2)); }
+    .back  { transform: rotateY(180deg) translateZ(calc(var(--thk)/2)); }
+
+    /* sisi blok (isi tengah kad) */
+    .side { position:absolute; background: linear-gradient(180deg,#e5e7eb,#cbd5e1 60%,#94a3b8); box-shadow: inset 0 0 6px rgba(0,0,0,.12); }
+    .side.left   { width:var(--thk); height:100%; left:0;  top:0; transform: rotateY(-90deg) translateZ(calc(50% - var(--thk)/2)); transform-origin:left center;  border-radius:8px; }
+    .side.right  { width:var(--thk); height:100%; right:0; top:0; transform: rotateY( 90deg) translateZ(calc(50% - var(--thk)/2)); transform-origin:right center; border-radius:8px; }
+    .side.top    { height:var(--thk); width:100%; left:0;  top:0; transform: rotateX( 90deg) translateZ(calc(50% - var(--thk)/2)); transform-origin:center top;    border-radius:8px; background: linear-gradient(90deg,#e5e7eb,#cbd5e1 60%,#94a3b8); }
+    .side.bottom { height:var(--thk); width:100%; left:0;  bottom:0; transform: rotateX(-90deg) translateZ(calc(50% - var(--thk)/2)); transform-origin:center bottom; border-radius:8px; background: linear-gradient(90deg,#e5e7eb,#cbd5e1 60%,#94a3b8); }
+
+    /* ================= Balloon (avatar) + Modal ================= */
+    .float-badge { position:fixed; right:18px; bottom:22px; z-index:70; display:flex; align-items:center; gap:.5rem; animation:bob 2.6s ease-in-out infinite; }
+    .speech { background:#0ea5e9; color:#fff; padding:.5rem .7rem; border-radius:9999px; font-size:.8rem; box-shadow:0 10px 20px rgba(14,165,233,.25); position:relative; }
+    .speech:after { content:""; position:absolute; right:-6px; bottom:10px; width:10px; height:10px; background:#0ea5e9; transform:rotate(45deg); }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+    .glass { background: linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.35)); backdrop-filter: blur(8px); }
+
+    /* Zoom overlay */
+    #zoomOverlay { touch-action:auto; }
+    #zoomImg.fit  { max-width:92vw; max-height:92vh; object-fit:contain; }
+    #zoomImg.full { max-width:none; max-height:none; }
   </style>
 </head>
 <body class="antialiased text-slate-800">
@@ -209,77 +253,58 @@
     © <span id="y"></span> Prudential Takaful . Semua hak cipta terpelihara.
   </footer>
 
-  <!-- ===== Balloon / Floating Button + Business Card Panel ===== -->
-  <!-- Overlay -->
-  <div id="bc-overlay" class="hidden fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm"></div>
+  <!-- ========= Balloon avatar (bottom-right) ========= -->
+  <div id="bc-badge" class="float-badge">
+    <div class="speech hidden sm:block">Tanya saya 🚀</div>
+    <button class="relative w-14 h-14 rounded-full ring-4 ring-white shadow-lg overflow-hidden focus:outline-none focus:ring-4 focus:ring-sky-300" aria-label="Buka kad bisnes">
+      <img src="https://i.ibb.co/0pCRzt0b/8284c3c0-29c5-11ed-b68f-96d3f09e23e7.jpg" alt="Avatar" class="w-full h-full object-cover">
+      <span class="absolute inset-0 rounded-full animate-ping bg-sky-500/25"></span>
+    </button>
+  </div>
 
-  <!-- Floating button -->
-  <button id="bc-fab"
-    class="fixed bottom-6 right-6 z-[70] w-14 h-14 rounded-full bg-sky-600 text-white shadow-lg shadow-sky-600/20
-           flex items-center justify-center hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-sky-300"
-    aria-label="Buka kad bisnes">
-    <!-- chat icon -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-            d="M7 8h10M7 12h6M20 12c0 4.418-4.03 8-9 8-1.188 0-2.32-.19-3.36-.54L4 20l.54-3.64C4.19 15.32 4 14.19 4 13c0-4.418 4.03-8 9-8s7 3.582 7 7z"/>
-    </svg>
-    <span class="absolute inset-0 rounded-full animate-ping bg-sky-500/30"></span>
-  </button>
+  <!-- Overlay + Modal Kad 3D -->
+  <div id="bc-overlay" class="hidden fixed inset-0 z-[80] bg-black/40 backdrop-blur-sm"></div>
+  <div id="bc-modal" class="hidden fixed inset-0 z-[90] p-4 grid place-items-center">
+    <div class="glass rounded-2xl border border-white/30 shadow-2xl p-5 w-full max-w-xl relative">
+      <button id="bc-close" class="absolute top-3 right-3 p-2 rounded-lg hover:bg-white/60" aria-label="Tutup">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
 
-  <!-- Slide-in Panel (business card) -->
-  <aside id="bc-panel"
-    class="fixed top-0 right-0 z-[80] h-full w-[360px] max-w-[92vw] translate-x-full
-           bg-white border-l border-slate-200 shadow-2xl transition-transform duration-300 ease-out">
-    <div class="p-5">
-      <div class="flex items-center gap-3">
-        <img src="https://via.placeholder.com/96" alt="Hafizul" class="w-16 h-16 rounded-full border">
-        <div>
-          <h3 class="text-lg font-semibold text-slate-900">Hafizul</h3>
-          <p class="text-xs text-slate-500">Takaful Advisor • Prudential Takaful </p>
+      <div id="scene" class="scene mx-auto">
+        <div id="card3d" class="card3d select-none">
+          <!-- FRONT -->
+          <div class="face front" id="frontFace">
+            <img id="imgFront" src="https://i.ibb.co/kV8dVVS0/Scanned-Document-06-10-2025-at-22-20-01.jpg" alt="">
+          </div>
+          <!-- BACK -->
+          <div class="face back" id="backFace">
+            <img id="imgBack"  src="https://i.ibb.co/MD2DP338/Scanned-Document-06-10-2025-at-22-20-45.jpg" alt="">
+          </div>
+          <!-- Sisi (isi tengah) -->
+          <div class="side left"></div>
+          <div class="side right"></div>
+          <div class="side top"></div>
+          <div class="side bottom"></div>
         </div>
-        <button id="bc-close" class="ml-auto p-2 rounded-lg hover:bg-slate-100 text-slate-500" aria-label="Tutup">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
       </div>
 
-      <div class="mt-5 grid gap-3">
-        <a href="https://wa.me/601125517767" target="_blank" rel="noopener"
-           class="flex items-center gap-3 px-4 py-3 rounded-xl border border-emerald-200 hover:bg-emerald-50">
-          <span class="inline-flex w-9 h-9 rounded-lg bg-emerald-500/10 items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.02 2 11.1c0 2.22.87 4.25 2.3 5.82L3 22l5.26-1.38c1.19.33 2.44.51 3.74.51 5.52 0 10-4.02 10-9.1S17.52 2 12 2z"/>
-            </svg>
-          </span>
-          <div>
-            <div class="font-medium text-slate-900">WhatsApp</div>
-            <div class="text-xs text-slate-500">011-2551 7767 (chat segera)</div>
-          </div>
-        </a>
-
-        <a href="https://linktr.ee/hafizulca" target="_blank" rel="noopener"
-           class="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 hover:bg-slate-50">
-          <span class="inline-flex w-9 h-9 rounded-lg bg-slate-500/10 items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                    d="M10 14L21 3m0 0h-6m6 0v6M13 5H7a4 4 0 0 0 0 8h2"/>
-            </svg>
-          </span>
-          <div>
-            <div class="font-medium text-slate-900">Linktree</div>
-            <div class="text-xs text-slate-500">Semua pautan & profil</div>
-          </div>
-        </a>
-      </div>
-
-      <div class="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200">
-        <p class="text-sm text-slate-700">
-          Waktu respons: 8.00 pagi – 12.00 malam. Untuk kecemasan, call terus <a href="tel:+601125517767" class="underline">011-2551 7767</a>.
-        </p>
+      <div class="mt-3 flex justify-between text-xs text-slate-600">
+        <button id="flip"  class="px-3 py-1 rounded-lg border border-slate-300 bg-white/80 hover:bg-white">Flip</button>
+        <button id="reset" class="px-3 py-1 rounded-lg border border-slate-300 bg-white/80 hover:bg-white">Reset</button>
       </div>
     </div>
-  </aside>
+  </div>
+
+  <!-- Zoom overlay -->
+  <div id="zoomOverlay" class="hidden fixed inset-0 z-[100] bg-black/80">
+    <div id="zoomScroll" class="w-full h-full overflow-auto flex items-center justify-center p-4">
+      <img id="zoomImg" class="fit select-none" src="" alt="">
+    </div>
+    <div class="absolute top-3 right-3 flex gap-2">
+      <button id="zoomToggle" class="px-3 py-1 rounded-lg bg-white/90 text-slate-800 text-sm">100%</button>
+      <button id="zoomClose"  class="px-3 py-1 rounded-lg bg-white/90 text-slate-800 text-sm">Close</button>
+    </div>
+  </div>
 
   <script>
     // Tahun footer
@@ -323,25 +348,89 @@ Mohon semak pelan yang sesuai. Terima kasih.`;
       window.open(url, '_blank', 'noopener') || (window.location.href = url);
     }
 
-    // ===== Balloon / Panel logic =====
-    const bcFab = document.getElementById('bc-fab');
-    const bcPanel = document.getElementById('bc-panel');
-    const bcOverlay = document.getElementById('bc-overlay');
-    const bcClose = document.getElementById('bc-close');
+    /* ===== Balloon open/close ===== */
+    const badge   = document.getElementById('bc-badge');
+    const overlay = document.getElementById('bc-overlay');
+    const modal   = document.getElementById('bc-modal');
+    const closeX  = document.getElementById('bc-close');
 
-    function openPanel() {
-      bcOverlay.classList.remove('hidden');
-      bcPanel.classList.remove('translate-x-full');
+    function openModal(){ overlay.classList.remove('hidden'); modal.classList.remove('hidden'); autoSpin(true); }
+    function closeModal(){ modal.classList.add('hidden'); overlay.classList.add('hidden'); autoSpin(false); }
+
+    badge.addEventListener('click', openModal);
+    overlay.addEventListener('click', closeModal);
+    closeX.addEventListener('click', closeModal);
+    document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+    /* ===== Kad 3D (extruded) ===== */
+    const scene   = document.getElementById('scene');
+    const card    = document.getElementById('card3d');
+    const imgF    = document.getElementById('imgFront');
+    const imgB    = document.getElementById('imgBack');
+    const frontEl = document.getElementById('frontFace');
+    const backEl  = document.getElementById('backFace');
+    const btnR    = document.getElementById('reset');
+    const btnFlip = document.getElementById('flip');
+
+    let rotX=0, rotY=0, dragging=false, lastX=0, lastY=0, spinTimer=null, flipped=false;
+
+    function render(){
+      const viewY = flipped ? rotY + 180 : rotY;
+      card.style.transform = `rotateX(${rotX}deg) rotateY(${viewY}deg)`;
     }
-    function closePanel() {
-      bcPanel.classList.add('translate-x-full');
-      bcOverlay.classList.add('hidden');
+    function autoSpin(run){ if(spinTimer){clearInterval(spinTimer);spinTimer=null;} if(run){ spinTimer=setInterval(()=>{rotY+=0.6;render();},30); } }
+    function pos(e){ return e.touches? {x:e.touches[0].clientX,y:e.touches[0].clientY}:{x:e.clientX,y:e.clientY}; }
+    function down(e){ dragging=true; card.classList.add('is-dragging'); const p=pos(e); lastX=p.x; lastY=p.y; autoSpin(false); }
+    function move(e){ if(!dragging) return; const p=pos(e); const dx=p.x-lastX, dy=p.y-lastY;
+      rotY += dx*0.4; rotX -= dy*0.4; rotX = Math.max(-60, Math.min(60, rotX)); lastX=p.x; lastY=p.y; render(); }
+    function up(){ dragging=false; card.classList.remove('is-dragging'); }
+    card.addEventListener('mousedown', down); card.addEventListener('touchstart', down,{passive:true});
+    window.addEventListener('mousemove', move); window.addEventListener('touchmove', move,{passive:true});
+    window.addEventListener('mouseup', up);   window.addEventListener('touchend', up);
+
+    btnFlip.addEventListener('click', ()=>{ flipped=!flipped; render(); });
+    btnR.addEventListener('click', ()=>{ rotX=0; rotY=0; flipped=false; render(); autoSpin(true); });
+
+    // Saiz ikut nisbah imej (tiada crop/ruang putih)
+    function fitToImage(){
+      const nw = imgF.naturalWidth, nh = imgF.naturalHeight; if(!nw||!nh) return;
+      const ratio = nh / nw;
+      const maxW = Math.min(360, window.innerWidth - 48);
+      const maxH = Math.min(560, window.innerHeight - 200);
+      let w = maxW, h = w * ratio; if (h > maxH){ h = maxH; w = h / ratio; }
+      scene.style.width = w + 'px'; scene.style.height = h + 'px';
+      card.style.width  = w + 'px'; card.style.height  = h + 'px';
+    }
+    function init(){ fitToImage(); render(); }
+    if (imgF.complete) init(); else imgF.addEventListener('load', init);
+    window.addEventListener('resize', fitToImage);
+
+    /* ===== Zoom overlay ===== */
+    const zoomOverlay = document.getElementById('zoomOverlay');
+    const zoomImg     = document.getElementById('zoomImg');
+    const zoomScroll  = document.getElementById('zoomScroll');
+    const zoomClose   = document.getElementById('zoomClose');
+    const zoomToggle  = document.getElementById('zoomToggle');
+    let zoomMode='fit';
+
+    function openZoom(src){
+      zoomImg.src = src; zoomMode='fit';
+      zoomImg.classList.remove('full'); zoomImg.classList.add('fit');
+      zoomOverlay.classList.remove('hidden'); autoSpin(false);
+      zoomScroll.scrollTop=0; zoomScroll.scrollLeft=0;
+    }
+    function closeZoom(){ zoomOverlay.classList.add('hidden'); autoSpin(true); }
+    function toggleZoom(){
+      if(zoomMode==='fit'){ zoomMode='full'; zoomImg.classList.remove('fit'); zoomImg.classList.add('full'); zoomToggle.textContent='Fit'; }
+      else { zoomMode='fit'; zoomImg.classList.remove('full'); zoomImg.classList.add('fit'); zoomToggle.textContent='100%'; zoomScroll.scrollTop=0; zoomScroll.scrollLeft=0; }
     }
 
-    bcFab.addEventListener('click', openPanel);
-    bcOverlay.addEventListener('click', closePanel);
-    bcClose.addEventListener('click', closePanel);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePanel(); });
+    frontEl.addEventListener('click', ()=>{ if(!dragging) openZoom(imgF.src); });
+    backEl .addEventListener('click', ()=>{ if(!dragging) openZoom(imgB.src); });
+    zoomClose.addEventListener('click', closeZoom);
+    zoomToggle.addEventListener('click', toggleZoom);
+    document.addEventListener('keydown', (e)=>{ if(!zoomOverlay.classList.contains('hidden') && e.key==='Escape') closeZoom(); });
+    zoomOverlay.addEventListener('click', (e)=>{ if(e.target===zoomOverlay) closeZoom(); });
   </script>
 </body>
 </html>
